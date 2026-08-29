@@ -480,7 +480,7 @@ static void _find_scripts(Node *p_base, Node *p_current, HashSet<Ref<Script>> &r
 }
 
 void DocumentList::update_list() {
-	TabContainer *tab_container = script_editor->tab_container;
+	TabContainer *tab_container = script_editor->tab_container; // NOTE: Items fetched for the item_list come from script_editor's tab_container
 	const int num_open_editors = tab_container->get_tab_count();
 	const Ref<Texture2D> &help_icon = get_editor_theme_icon(SNAME("Help"));
 
@@ -569,7 +569,7 @@ void DocumentList::_update_item_list() {
 		if (item.hidden) {
 			continue;
 		}
-		item_list->add_item(item.display_name, item.icon);
+		item_list->add_item(item.display_name, item.icon); // NOTE: This adds the script/doc to the list
 		if (item.tool) {
 			item_list->set_item_icon_modulate(-1, tool_color);
 		}
@@ -3174,7 +3174,7 @@ void ScriptEditor::_update_filenames() {
 			disambiguated_names.push_back(display_name);
 		}
 		if (eh) {
-			const String name = eh->get_class().is_empty() ? TTR("Unknown Help Class") : eh->get_class().unquote();
+			const String name = eh->get_class().is_empty() ? TTR("Unknown Help Class") : eh->get_class().unquote(); // NOTE: This is where the doc name is set when fails
 			unsaved.push_back(false);
 
 			full_paths.push_back(name);
@@ -3705,7 +3705,7 @@ void ScriptEditor::_help_class_goto(const String &p_desc) {
 	eh->go_to_help(p_desc);
 	ScriptEditorNavigationMarker::get_singleton()->locate_end();
 
-	tab_container->add_child(eh);
+	tab_container->add_child(eh); // NOTE: This is where the doc is added to the list
 	_update_filenames();
 	_go_to_tab(tab_container->get_tab_count() - 1);
 	sort_document_editors();
