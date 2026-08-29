@@ -548,7 +548,7 @@ void DocumentList::update_list() {
 		}
 	}
 
-	_update_item_list();
+	_update_item_list(); // NOTE: This updates the list with the scripts/docs open.
 }
 
 void DocumentList::_update_item_list() {
@@ -661,7 +661,7 @@ DocumentList::DocumentList(ScriptEditor *p_script_editor) {
 	item_list->set_allow_rmb_select(true);
 	item_list->connect("item_clicked", callable_mp(this, &DocumentList::_document_clicked));
 	item_list->connect(SceneStringName(item_selected), callable_mp(this, &DocumentList::_document_selected));
-	add_child(item_list);
+	add_child(item_list); // NOTE: This is where the list is added to the interface
 	SET_DRAG_FORWARDING_GCD(item_list, DocumentList);
 
 	context_menu = memnew(PopupMenu);
