@@ -521,6 +521,8 @@ void DocumentList::update_list() {
 			}
 		}
 		if (eh) {
+			WARN_PRINT("Adding help page to document list: " + eh->get_class());
+
 			const String name = eh->get_class().is_empty() ? TTR("Unknown Help Class") : eh->get_class().unquote();
 			const String tooltip = vformat(TTR("%s Class Reference"), name);
 
@@ -3540,10 +3542,11 @@ void ScriptEditor::set_window_layout(Ref<ConfigFile> p_layout) {
 
 	for (int i = 0; i < helps.size(); i++) {
 		String path = helps[i];
+
 		if (path.is_empty()) { // invalid, skip
 			continue;
 		}
-		_help_class_open(path);
+		_help_class_open(path); // NOTE: Doc is restored here, in theory... but path is empty
 	}
 
 	for (int i = 0; i < tab_container->get_tab_count(); i++) {
@@ -3634,6 +3637,7 @@ void ScriptEditor::get_window_layout(Ref<ConfigFile> p_layout) {
 		}
 
 		if (EditorHelp *eh = Object::cast_to<EditorHelp>(tab_container->get_tab_control(i))) {
+			WARN_PRINT("Saving help page: " + eh->get_class()); // NOTE: This is where the doc name is saved, but it is empty when restoring
 			helps.push_back(eh->get_class());
 		}
 	}
@@ -4609,7 +4613,7 @@ void ScriptEditorPlugin::save_external_data() {
 
 void ScriptEditorPlugin::set_window_layout(Ref<ConfigFile> p_layout) {
 	if (bool(EDITOR_GET("text_editor/behavior/files/restore_scripts_on_load"))) {
-		script_editor->set_window_layout(p_layout);
+		script_editor->set_window_layout(p_layout); // NOTE: This restores files on load
 	}
 }
 
