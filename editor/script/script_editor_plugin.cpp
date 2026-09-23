@@ -3475,6 +3475,8 @@ void ScriptEditor::set_window_layout(Ref<ConfigFile> p_layout) {
 		helps = p_layout->get_value(config_section, "open_help");
 	}
 
+	helps[0] = "class_name:\"new_script.gd\"";
+
 	restoring_layout = true;
 
 	HashSet<String> loaded_scripts;
@@ -3542,6 +3544,7 @@ void ScriptEditor::set_window_layout(Ref<ConfigFile> p_layout) {
 
 	for (int i = 0; i < helps.size(); i++) {
 		String path = helps[i];
+		WARN_PRINT("Restoring help page: " + path);
 
 		if (path.is_empty()) { // invalid, skip
 			continue;
